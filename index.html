@@ -10,18 +10,23 @@
   </style>
   <link rel="stylesheet" href="styles.css">
   
+  <!-- Verwendet für den Export als XLSX (Excel) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 </head>
+
 <body>
+  <!-- Navigationsleiste -->
   <div class="topnav" id="myTopnav">
-  <a href="index.html" class="active">Fahrtenbuch</a>
-  <a href="statistik.html">Statistik</a>
-  <a href="info.html">Information</a>
-  <a href="javascript:void(0);" class="icon" onclick="toggleBar()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
+    <a href="index.html" class="active">Fahrtenbuch</a>
+    <a href="statistik.html">Statistik</a>
+    <a href="info.html">Information</a>
+    <a href="javascript:void(0);" class="icon" onclick="toggleBar()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+
+  <!-- Popup Fenster für die Bestätigung alle Einträge zu löschen -->
   <div id="confirmationModal" class="modal">
     <div class="modal-content">
       <p>Sind Sie sicher, dass Sie alle Einträge <b>unwiderruflich löschen</b> wollen?</p>
@@ -30,52 +35,54 @@
     </div>
   </div>
 
+  <!-- Popup Fenster für die Erstellung eines neuen Eintrags -->
   <div id="neuerEintragModal" class="modal">
     <div class="modal-content">
      <h2>Neuer Eintrag</h2>
-            <form id="formular">
-                <label for="kilometerstand">Kilometerstand:</label>
-                <input type="text" id="kilometerstand" name="kilometerstand" required><br>
-                <label for="datum">Datum:</label>
-                <input type="date" id="datum" name="datum" required><br>
-                <label for="preis">Preis gezahlt:</label>
-                <input type="text" id="preis" name="preis" required><br>
+      <form id="formular">
+        <label for="kilometerstand">Kilometerstand:</label>
+        <input type="text" id="kilometerstand" name="kilometerstand" required><br>
+        <label for="datum">Datum:</label>
+        <input type="date" id="datum" name="datum" required><br>
+        <label for="preis">Preis gezahlt:</label>
+        <input type="text" id="preis" name="preis" required><br>
         <label for="liter_getankt">Liter getankt:</label>
-                <input type="text" id="liter_getankt" name="liter_getankt" required><br>
-                <label for="tankstelle">Tankstelle:</label>
-                <select name="tankstelle" id="tankstelle">
-                  <option value="JET">BP</option>
-                  <option value="Shell">Shell</option>
-                  <option value="OMV">OMV</option>
-                  <option value="SOCAR">SOCAR</option>
-                  <option value="Roth">Roth</option>
-                  <option value="Turmöl">Turmöl</option>
-                  <option value="Eni">Eni</option>
-                  <option value="Spritkönig">Spritkönig</option>
-                  <option value="DISKONT">DISKONT</option>
-                  <option value="BP">JET</option>
-                  <option value="F. Leitner">F. Leitner</option>
-                  <option value="Rumpold">Rumpold</option>
-                  <option value="Sprint">Sprint</option>
-                </select><br>
-                <label for="sprit">Sprit:</label>
-                <select name="sprit" id="sprit">
-                  <option value="Ultimate">Ultimate</option>
-                  <option value="Dynamic">Dynamic</option>
-                  <option value="V-Power">V-Power</option>
-                  
-                  <option value="Racing">Racing</option>
-                  <option value="Diesel">Diesel</option>
-                  <option value="Maxxmotion">Maxxmotion</option>
-                  
-                  <option value="Prem. Diesel">Prem. Diesel</option>
-                </select><br><br><br>
-                <button type="button" id="eintragSpeichern">Speichern</button>
-                <button id="eintragSpeichernAbbrechen">Abbrechen</button>
-            </form>
+        <input type="text" id="liter_getankt" name="liter_getankt" required><br>
+        <label for="tankstelle">Tankstelle:</label>
+        <select name="tankstelle" id="tankstelle">
+          <option value="JET">BP</option>
+          <option value="Shell">Shell</option>
+          <option value="OMV">OMV</option>
+          <option value="SOCAR">SOCAR</option>
+          <option value="Roth">Roth</option>
+          <option value="Turmöl">Turmöl</option>
+          <option value="Eni">Eni</option>
+          <option value="Spritkönig">Spritkönig</option>
+          <option value="DISKONT">DISKONT</option>
+          <option value="BP">JET</option>
+          <option value="F. Leitner">F. Leitner</option>
+          <option value="Rumpold">Rumpold</option>
+          <option value="Sprint">Sprint</option>
+        </select><br>
+        <label for="sprit">Sprit:</label>
+        <select name="sprit" id="sprit">
+          <option value="Ultimate">Ultimate</option>
+          <option value="Dynamic">Dynamic</option>
+          <option value="V-Power">V-Power</option>
+          
+          <option value="Racing">Racing</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Maxxmotion">Maxxmotion</option>
+          
+          <option value="Prem. Diesel">Prem. Diesel</option>
+        </select><br><br><br>
+        <button type="button" id="eintragSpeichern">Speichern</button>
+        <button id="eintragSpeichernAbbrechen">Abbrechen</button>
+      </form>
     </div>
   </div>
 
+  <!-- Popup Fenster für das Filtern von Einträgen  -->
   <div id="filterModal" class="modal">
     <div class="modal-content">
        <h2>Einträge Filtern</h2>
@@ -86,45 +93,50 @@
           <input type="date" id="end" name="end"><br><br><br>
           <button type="button" id="filterBestätigen">Filtern <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
           <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
-        </svg></button>
-        <button id="filternAbbrechen">Abbrechen</button>
+          </svg></button>
+          <button id="filternAbbrechen">Abbrechen</button>
         </form>
     </div>
   </div>
 
-    <div class="container">
-        <button id="neuerEintragBtn"><span class="pc-only">Neuer Eintrag </span>+</button>
-        <button id="alleEinträgeLöschenBtn">Alle Einträge Löschen 🗑</button><br>
+  <!-- Container, der die Schaltflächen für das Managen von Einträgen beinhaltet -->
+  <div class="container">
+      <button id="neuerEintragBtn">Neuer Eintrag +</button>
+      <button id="alleEinträgeLöschenBtn"><span class="pc-only">Alle Einträge Löschen</span>🗑</button><br>
 
-        <button id="filtern"><span class="pc-only">Einträge Filtern</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
-          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
-        </svg>
-        </button>
+      <button id="filtern"><span class="pc-only">Einträge Filtern</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+        <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
+      </svg>
+      </button>
 
-        <button id="exportieren"><span class="pc-only">Einträge Exportieren </span>↥</button>
-        <button id="importieren"><span class="pc-only">Einträge Importieren </span>↧</button>
+      <button id="exportieren"><span class="pc-only">Einträge Exportieren </span>↥</button>
+      <button id="importieren"><span class="pc-only">Einträge Importieren </span>↧</button>
+  </div>
 
-        <table id="fahrtenTabelle">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Datum</th>
-                    <th>Kilometerstand</th>
-                    <th>Preis</th>
-		            <th>Liter</th>
-                    <th>Tankstelle</th>
-                    <th>Sprit</th>
-                    <th>Verbrauch</th>
-                    <th>Literpreis</th>
-                    <th>Aktion</th>
-                </tr>
-            </thead>
-            <tbody id="fahrtenListe">
-                <!-- Hier werden die Einträge dynamisch hinzugefügt -->
-            </tbody>
-        </table>
-    </div>
-    <script src="script.js"></script>
+  <div class="container-table">
+    <table id="fahrtenTabelle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Datum</th>
+          <th>Kilometerstand</th>
+          <th>Preis</th>
+        <th>Liter</th>
+          <th>Tankstelle</th>
+          <th>Sprit</th>
+          <th>Verbrauch</th>
+          <th>Literpreis</th>
+          <th>Aktion</th>
+        </tr>
+      </thead>
+      <tbody id="fahrtenListe">
+          <!-- Hier werden die Einträge dynamisch hinzugefügt -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <script src="script.js"></script>
 </body>
 </html>

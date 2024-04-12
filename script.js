@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
         ].join('\r\n')
 
         const blob = new Blob([csv], { type: 'text/csv' });
-        
+
         Papa.parse(blob, {
     	complete: function(result) {
 				const worksheet = XLSX.utils.json_to_sheet(result.data);
@@ -185,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function erstelleEintrag(nummer = '', datum = '', kilometerstand = '', preis = '', liter_getankt = '', tankstelle = '', sprit = '', verbrauch = '', literpreis = '') {
     const eintragElement = document.createElement("tr");
+
      var now = new Date().toJSON().slice(0, 10);
      preis = preis.replaceAll(",", ".")
      liter_getankt = liter_getankt.replaceAll(",", ".")
@@ -203,6 +204,7 @@ function erstelleEintrag(nummer = '', datum = '', kilometerstand = '', preis = '
     `;
 
     } else {
+            eintragElement.classList.add("container-entry")
         	if (datum == "") datum = now
 
             if (nummer == "" || nummer != Math.ceil(fahrtenListe.childElementCount/2+1)) nummer = Math.ceil(fahrtenListe.childElementCount/2+1)
