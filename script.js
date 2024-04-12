@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const yesButton = document.getElementById("yesButton");
     const noButton = document.getElementById("noButton");
 
+    const editmodal = document.getElementById("editierenEintragModal")
+    const edityesButton = document.getElementById("eintragEditierenSpeichern");
+    const editnoButton = document.getElementById("eintragEditiernSpeichernAbbrechen");
+
     // Neuen Eintrag hinzufügen
     neuerEintragBtn.addEventListener("click", function() {
         neuerEintragContainer.style.display = "block";
@@ -61,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const datum = document.getElementById("datum").value;
         
         const preis = document.getElementById("preis").value;
-	const liter_getankt = document.getElementById("liter_getankt").value;
+	    const liter_getankt = document.getElementById("liter_getankt").value;
         let tankstelle = document.getElementById("tankstelle").value;
         if (tankstelle === "Sonstiges") tankstelle = document.getElementById("others-text").value || "-";
         const sprit = document.getElementById("sprit").value;
@@ -117,15 +121,87 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    let editedNumber = 0
+
     // Ereignisdelegation für das Klicken auf den "Editieren" -Knopf für jeden Eintrag
     fahrtenListe.addEventListener("click", function(event) {
         if (event.target.classList.contains("eintragBearabeiten")) {
             const eintragElement = event.target.parentElement.parentElement;
-            console.log(eintragElement.innerHTML)
-            speichereEinträge();
 
-        location.reload();
+            const form = editmodal.querySelector("div form");
+
+            editedNumber = eintragElement.children[0].textContent
+
+            // Kilometer setzen
+            form.children[1].value = eintragElement.children[2].textContent;
+
+            // Datum setzen
+            form.children[4].value = eintragElement.children[1].textContent;
+
+            // Preis setzen
+            form.children[7].value = eintragElement.children[3].textContent;
+
+            // Liter getankt setzen
+            form.children[10].value = eintragElement.children[4].textContent;
+
+            // Tankstelle setzen
+            var tankstelle = eintragElement.children[5].textContent;
+
+            for (var i = 0; i < form.children[13].options.length; i++) {
+                if (form.children[13].options[i].textContent === tankstelle) {
+                    form.children[13].selectedIndex = i
+                }
+            }
+
+            // Sprit setzen
+            var sprit = eintragElement.children[6].textContent;
+
+            for (var i = 0; i < form.children[17].options.length; i++) {
+                if (form.children[17].options[i].textContent === sprit) {
+                    form.children[17].selectedIndex = i
+                }
+            }
+
+            editmodal.style.display = "block";
         }
+    });
+
+    edityesButton.addEventListener("click", function() {
+        if (event.target.classList.contains("eintragEditierenSpeichern")) {
+            const index = (Math.ceil(fahrtenListe.children.length/2) - editedNumber)
+            const eintragElement = fahrtenListe.children[index]
+
+            editmodal.style.display = "none";
+
+            const kilometerstand = document.getElementById("kilometerstand2").value;
+            const datum = document.getElementById("datum2").value;
+            
+            const preis = document.getElementById("preis2").value;
+            const liter_getankt = document.getElementById("liter_getankt2").value;
+            let tankstelle = document.getElementById("tankstelle2").value;
+            if (tankstelle === "Sonstiges2") tankstelle = document.getElementById("others-text2").value || "-";
+            const sprit = document.getElementById("sprit2").value;
+
+            if (kilometerstand == "") return
+            if (liter_getankt == "") return
+            if (preis == "") return
+
+            const eintrag = erstelleEintrag(editedNumber, datum, kilometerstand, preis, liter_getankt , tankstelle, sprit);
+            fahrtenListe.insertBefore(eintrag, eintragElement);
+
+            return
+
+            eintragElement.remove();
+
+            // Eintrag im lokalen Speicher speichern
+            speichereEinträge();
+            
+            location.reload();
+        }       
+    });
+
+    editnoButton.addEventListener("click", function() {
+       editmodal.style.display = "none";
     });
 
     // Exportieren der Einträge als CSV
@@ -252,7 +328,6 @@ function speichereEinträge() {
     }
 
     });
-    console.log(JSON.stringify(einträge))
     localStorage.setItem("fahrtenbuchEintrag", JSON.stringify(einträge));
 }
 

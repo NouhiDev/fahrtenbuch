@@ -111,6 +111,69 @@
     </div>
   </div>
 
+  <!-- Popup Fenster für die Editierung eines Eintrags -->
+  <div id="editierenEintragModal" class="modal">
+    <div class="modal-content">
+     <h2>Eintrag Editieren</h2>
+      <form id="formular">
+        <label for="kilometerstand2">Kilometerstand:</label>
+        <input type="text" id="kilometerstand2" name="kilometerstand" required>
+        <br>
+        <label for="datum2">Datum:</label>
+        <input type="date" id="datum2" name="datum" required>
+        <br>
+        <label for="preis2">Preis gezahlt:</label>
+        <input type="text" id="preis2" name="preis" required>
+        <br>
+        <label for="liter_getankt2">Liter getankt:</label>
+        <input type="text" id="liter_getankt2" name="liter_getankt" required>
+        <br>
+        <label for="tankstelle2">Tankstelle:</label>
+        <select name="tankstelle" id="tankstelle2" onchange="updateTankstelleInput()">
+          <option value="JET">BP</option>
+          <option value="Shell">Shell</option>
+          <option value="OMV">OMV</option>
+          <option value="SOCAR">SOCAR</option>
+          <option value="Roth">Roth</option>
+          <option value="Turmöl">Turmöl</option>
+          <option value="Eni">Eni</option>
+          <option value="Spritkönig">Spritkönig</option>
+          <option value="DISKONT">DISKONT</option>
+          <option value="BP">JET</option>
+          <option value="F. Leitner">F. Leitner</option>
+          <option value="Rumpold">Rumpold</option>
+          <option value="Sprint">Sprint</option>
+          <option value="Sonstiges">Sonstiges</option>
+        </select>
+        <input
+          style="display: none;"
+          type="text"
+          name=""
+          id="others-text2"
+          placeholder="..."
+        />
+        <br>
+        <label for="sprit2">Sprit:</label>
+        <select name="sprit" id="sprit2">
+          <option value="Ultimate">Ultimate</option>
+          <option value="Dynamic">Dynamic</option>
+          <option value="V-Power">V-Power</option>
+          
+          <option value="Racing">Racing</option>
+          <option value="Diesel">Diesel</option>
+                    <option value="Prem. Diesel">Prem. Diesel</option>
+          <option value="Maxxmotion">Maxxmotion</option>
+
+          <option value="Benzin">Benzin</option>
+          <option value="Prem. Benzin">Prem. Benzin</option>
+          
+        </select><br><br><br>
+        <button type="button" id="eintragEditierenSpeichern" class="eintragEditierenSpeichern">Speichern</button>
+        <button id="eintragEditiernSpeichernAbbrechen">Abbrechen</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Container, der die Schaltflächen für das Managen von Einträgen beinhaltet -->
   <div class="container">
     <button id="neuerEintragBtn">Neuer Eintrag +</button>
