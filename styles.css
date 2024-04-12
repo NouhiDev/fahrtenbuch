@@ -234,6 +234,11 @@ button:active {
 @media
 only screen and (max-width: 1000px),
 (min-device-width: 738px) and (max-device-width: 1200px) {
+
+  .pc-only {
+    display: none;
+  }
+
   table, thead, tbody, th, td, tr {
     display: block;
   }
