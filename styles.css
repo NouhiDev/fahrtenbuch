@@ -163,6 +163,10 @@ button:active {
   background-color: #d9fadd;
 }
 
+.mobile-only {
+  display: none;
+}
+
 /* Top Bar Style */
 
 .topnav {
@@ -266,6 +270,10 @@ only screen and (max-width: 1000px),
 
   .pc-only {
     display: none;
+  }
+
+  .mobile-only {
+    display: block;
   }
 
   table, thead, tbody, th, td, tr {

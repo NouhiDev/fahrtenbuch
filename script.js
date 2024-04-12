@@ -62,7 +62,8 @@ document.addEventListener("DOMContentLoaded", function() {
         
         const preis = document.getElementById("preis").value;
 	const liter_getankt = document.getElementById("liter_getankt").value;
-        const tankstelle = document.getElementById("tankstelle").value;
+        let tankstelle = document.getElementById("tankstelle").value;
+        if (tankstelle === "Sonstiges") tankstelle = document.getElementById("others-text").value || "-";
         const sprit = document.getElementById("sprit").value;
 
         if (kilometerstand == "") return
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
         speichereEinträge();
         
         // Formular ausblenden und zurücksetzen
-        eintragFormular.classList.remove("sichtbar");
+        neuerEintragContainer.style.display = "none";
         
         location.reload();
     });
@@ -251,6 +252,7 @@ function speichereEinträge() {
     }
 
     });
+    console.log(JSON.stringify(einträge))
     localStorage.setItem("fahrtenbuchEintrag", JSON.stringify(einträge));
 }
 
@@ -295,9 +297,8 @@ function ladeGespeicherteEinträge() {
         }
 		let literDiff = ""
 
-		const eintragElement2 = erstelleEintrag("", eintrag.datum , kmDiff, "" , literDiff , "", "", "", preisDiff);
+		const eintragElement2 = erstelleEintrag("", eintrag.datum , kmDiff, "" , literDiff , "", "", "", preisDiff, "", "");
 		fahrtenListe.insertBefore(eintragElement2, fahrtenListe.firstChild);
-
 
 	    }
       if (moreThanOne) {
@@ -352,4 +353,14 @@ function toggleBar() {
   } else {
     x.className = "topnav";
   }
+}
+
+function updateTankstelleInput() {
+    var x = document.getElementById("tankstelle").value;
+    var input = document.getElementById("others-text");
+    if (x === "Sonstiges") {
+     input.style.display = "inline-block";
+    } else {
+     input.style.display = "none";
+    }
 }
