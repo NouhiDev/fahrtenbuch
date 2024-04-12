@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const importierenBtn = document.getElementById("importieren");
     const filternBtn = document.getElementById("filtern");
     const eintragSpeichernAbbrechenBtn = document.getElementById("eintragSpeichernAbbrechen");
+    const filterContainer = document.getElementById("filterModal");
+    const neuerEintragContainer = document.getElementById("neuerEintragModal");
 
     const modal = document.getElementById("confirmationModal")
     const yesButton = document.getElementById("yesButton");
@@ -17,19 +19,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Neuen Eintrag hinzufügen
     neuerEintragBtn.addEventListener("click", function() {
-        filterFormular.classList.remove("sichtbar");
-        eintragFormular.classList.add("sichtbar");
+        neuerEintragContainer.style.display = "block";
+        filterContainer.style.display = "none";
     });
 
     eintragSpeichernAbbrechenBtn.addEventListener("click", function() {
-        filterFormular.classList.remove("sichtbar");
-        eintragFormular.classList.remove("sichtbar");
+        neuerEintragContainer.style.display = "none";
+        filterContainer.style.display = "none";
     });
 
     // Filtern
     filternBtn.addEventListener("click", function() {
-        eintragFormular.classList.remove("sichtbar");
-        filterFormular.classList.add("sichtbar");
+        neuerEintragContainer.style.display = "none";
+        filterContainer.style.display = "block";
     });
 
     filterBestätigenBtn.addEventListener("click", function() {
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        filterFormular.classList.remove("sichtbar");
+        filterContainer.style.display = "none";
     });
 
     // Eintrag speichern
@@ -111,6 +113,17 @@ document.addEventListener("DOMContentLoaded", function() {
             speichereEinträge();
 
 		location.reload();
+        }
+    });
+
+    // Ereignisdelegation für das Klicken auf den "Editieren" -Knopf für jeden Eintrag
+    fahrtenListe.addEventListener("click", function(event) {
+        if (event.target.classList.contains("eintragBearabeiten")) {
+            const eintragElement = event.target.parentElement.parentElement;
+            console.log(eintragElement.innerHTML)
+            speichereEinträge();
+
+        location.reload();
         }
     });
 
@@ -203,7 +216,7 @@ function erstelleEintrag(nummer = '', datum = '', kilometerstand = '', preis = '
             <td>${sprit}</td>
             <td>${parseFloat(verbrauch).toFixed(2)}</td>
             <td>${parseFloat(literpreis).toFixed(2)}</td>
-            <td class="last"><button class="eintragLöschenBtn">Löschen ✖</button></td>
+            <td class="last"><button class="eintragLöschenBtn">✖</button> <button class="eintragBearabeiten">✎</button></td>
         `;
 
     }
@@ -232,7 +245,6 @@ function speichereEinträge() {
         };
 
 	if (eintrag.sprit != "") {  
-        console.log(eintrag)       
         einträge.push(eintrag); 
     }
 
@@ -319,8 +331,8 @@ function handleFileSelect(event) {
 
 function parseCSVContents(contents) {
     const lines = contents.split('\n');
-    for (let i = 1; i < lines.length; i++) {
-        const cells = lines[i].split(',');
+    for(let i = lines.length - 1; i >= 1; i--) {
+          const cells = lines[i].split(',');
         if (cells.length >= 8) {
             const cleanedCells = cells.map(cell => cell.replace(/"/g, ''));
             const eintragElement = erstelleEintrag(...cleanedCells);

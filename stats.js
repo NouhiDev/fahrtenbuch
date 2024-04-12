@@ -5,7 +5,7 @@
 var einträge = []
 
 document.addEventListener("DOMContentLoaded", function() {
-	const container = document.getElementsByClassName("container")[0];
+	const container = document.getElementsByClassName("container2")[0];
 	const filternBtn = document.getElementById("filtern2");
 	const filterBestätigenBtn = document.getElementById("filterBestätigen");
 	const filterContainer = document.getElementById("filterModal");
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function appendTextToContainer(text = "") {
-	const container = document.getElementsByClassName("container")[0];
+	const container = document.getElementsByClassName("container2")[0];
 	if (container) {
 		const element = document.createElement("p");
 		element.innerHTML = text;
@@ -179,4 +179,13 @@ function ladeGespeicherteEinträge(container, start, end) {
    		appendTextToContainer(`<b>Meist getankter Sprit:</b> ${mode(sprit)}`);
    	}
    }
+}
+
+function toggleBar() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
 }
