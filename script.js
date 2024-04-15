@@ -232,15 +232,15 @@ document.addEventListener("DOMContentLoaded", function() {
         eintragRows.forEach(row => {
             if (row.classList.contains("versteckt")) return;
                 const eintrag = {
-                nummer: row.cells[0].textContent,
-                datum: row.cells[1].textContent,
-                kilometerstand: row.cells[2].textContent,
-                preis: row.cells[3].textContent,
-                liter_getankt: row.cells[4].textContent,
-                tankstelle: row.cells[5].textContent,
-                sprit: row.cells[6].textContent,
-                verbrauch: row.cells[7].textContent || '-',
-                literpreis: row.cells[8].textContent,
+                    nummer: cleanUpForSaving(row.cells[0].textContent),
+                    datum: cleanUpForSaving(row.cells[1].textContent),
+                    kilometerstand: cleanUpForSaving(row.cells[2].textContent),
+                    preis: cleanUpForSaving(row.cells[3].textContent),
+                    liter_getankt: cleanUpForSaving(row.cells[4].textContent),
+                    tankstelle: cleanUpForSaving(row.cells[5].textContent),
+                    sprit: cleanUpForSaving(row.cells[6].textContent),
+                    verbrauch: cleanUpForSaving(row.cells[7].textContent) || '-',
+                    literpreis: cleanUpForSaving(row.cells[8].textContent),
             };
             if (eintrag.sprit != "") einträge.push(eintrag);
         });
@@ -427,6 +427,7 @@ function ladeGespeicherteEinträge() {
                 } else {
                     preisDiff = "nahezu unverändert";
                 }
+                if (preisDiff == "<span id='green'>↓ 0.00 € billiger</span>") preisDiff = "nahezu unverändert";
         		let literDiff = "";
 
                 lastKmDiff = kmDiff;
