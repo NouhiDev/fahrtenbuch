@@ -59,16 +59,24 @@ document.addEventListener("DOMContentLoaded", function() {
         let tankstelle = document.getElementById("tankstelle").value;
         if (tankstelle === "Sonstiges") tankstelle = document.getElementById("others-text").value || "-";
         const sprit = document.getElementById("sprit").value;
-
+    
         if (kilometerstand == "") return
         if (liter_getankt == "") return
         if (preis == "") return
-
+    
         const eintrag = erstelleEintrag("", datum, kilometerstand, preis, liter_getankt , tankstelle, sprit);
         fahrtenListe.appendChild(eintrag);
-
-        // Eintrag im lokalen Speicher speichern
-        speichereEinträge();
+    
+        // Save entry to the server
+        saveEntriesToServer([{
+            nummer: "",
+            datum: datum,
+            kilometerstand: kilometerstand,
+            preis: preis,
+            liter_getankt: liter_getankt,
+            tankstelle: tankstelle,
+            sprit: sprit
+        }]);
         
         // Formular ausblenden und zurücksetzen
         neuerEintragContainer.style.display = "none";
@@ -276,7 +284,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Laden gespeicherter Einträge beim Start
-    ladeGespeicherteEinträge();
+    //ladeGespeicherteEinträge();
+    loadEntriesFromServer();
 });
 
 // Funktion zur Erstellung und Darstellung von Einträgen
@@ -359,6 +368,56 @@ function erstelleEintrag(nummer = '', datum = '', kilometerstand = '', preis = '
 // Entfernt alle rein visuellen Elemente (Einheiten und Differenzen für die mobile Ansicht)
 function cleanUpForSaving(str) {
     return str.split(" ")[0];
+}
+
+// DATABASE FUNCTIONS
+
+// Saving entries to the server
+function saveEntriesToServer(entries) {
+    fetch('/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ einträge: entries })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save entries to the server.');
+        }
+        console.log('Entries saved successfully.');
+    })
+    .catch(error => {
+        console.error(error.message);
+    });
+}
+
+// Loading entries from the server
+function loadEntriesFromServer() {
+    fetch('/fetch')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch entries from the server.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Data retrieved successfully
+            const entries = data.data;
+            // Process retrieved entries as needed
+            entries.forEach(entry => {
+                const eintragElement = erstelleEintrag(entry.nummer, entry.datum, entry.kilometerstand, entry.preis, entry.liter_getankt, entry.tankstelle, entry.sprit, entry.verbrauch, entry.literpreis);
+                fahrtenListe.appendChild(eintragElement);
+            });
+            console.log('Entries loaded successfully:', entries);
+        } else {
+            throw new Error('Server returned an error:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error(error.message);
+    });
 }
 
 // Speichert die Einträge in absteigender Reihenfolge
