@@ -374,7 +374,7 @@ function cleanUpForSaving(str) {
 
 // Saving entries to the server
 function saveEntriesToServer(entries) {
-    fetch('/save', {
+    fetch('https://ndevapi.com/save', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -394,7 +394,7 @@ function saveEntriesToServer(entries) {
 
 // Loading entries from the server
 function loadEntriesFromServer() {
-    fetch('/fetch')
+    fetch('https://ndevapi.com/fetch')
     .then(response => {
         if (!response.ok) {
             throw new Error('Failed to fetch entries from the server.');
